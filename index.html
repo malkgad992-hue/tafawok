@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تفاوك - منصة المذاكرة الذكية</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .login-box {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 32px;
+        }
+
+        .subtitle {
+            color: #888;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: right;
+        }
+
+        label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        /* الصفحة الرئيسية */
+        .hidden {
+            display: none;
+        }
+
+        .dashboard {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 20px;
+        }
+
+        .header h2 {
+            color: #667eea;
+        }
+
+        .logout-btn {
+            background: #ff6b6b;
+            padding: 8px 15px;
+            font-size: 12px;
+            width: auto;
+        }
+
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .subject-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 25px;
+            border-radius: 12px;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: center;
+        }
+
+        .subject-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .subject-card h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .subject-card p {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .study-time {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            border-right: 4px solid #667eea;
+        }
+
+        .study-time h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .time-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .time-item:last-child {
+            border-bottom: none;
+        }
+
+        .time-item span {
+            color: #666;
+        }
+
+        .time-item strong {
+            color: #667eea;
+        }
+
+        /* قسم الملاحظات */
+        .notes-container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .back-btn {
+            background: #999;
+            padding: 8px 15px;
+            font-size: 12px;
+            width: auto;
+            margin-bottom: 20px;
+        }
+
+        .notes-header {
+            margin-bottom: 25px;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 15px;
+        }
+
+        .notes-header h2 {
+            color: #667eea;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 300px;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: Arial, sans-serif;
+            resize: vertical;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .notes-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .save-btn, .delete-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .save-btn {
+            background: #667eea;
+            color: white;
+        }
+
+        .delete-btn {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .save-btn:hover, .delete-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .success-msg {
+            background: #51cf66;
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 15px;
+            text-align: center;
+            display: none;
+        }
+
+        @media (max-width: 600px) {
+            .subjects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .login-box, .dashboard, .notes-container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- صفحة التسجيل -->
+    <div class="container" id="loginPage">
+        <div class="login-box">
+            <h1>تفاوك</h1>
+            <p class="subtitle">منصة المذاكرة الذكية للبكالوريا</p>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="studentName">اسم الطالب</label>
+                    <input type="text" id="studentName" placeholder="أدخل اسمك" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="trackSubject">اختر مادة المسار</label>
+                    <select id="trackSubject" required>
+                        <option value="">-- اختر المادة --</option>
+                        <option value="physics">فيزياء</option>
+                        <option value="math">رياضيات</option>
+                        <option value="chemistry">كيمياء</option>
+                        <option value="programming">برمجة</option>
+                        <option value="psychology">علم نفس</option>
+                        <option value="french">فرنساوي</option>
+                        <option value="accounting">محاسبة</option>
+                        <option value="management">إدارة أعمال</option>
+                    </select>
+                </div>
+
+                <button type="submit">دخول</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- الصفحة الرئيسية -->
+    <div class="container hidden" id="dashboardPage">
+        <div class="dashboard">
+            <div class="header">
+                <h2 id="welcomeMsg">أهلاً</h2>
+                <button class="logout-btn" onclick="logout()">تسجيل خروج</button>
+            </div>
+
+            <div class="subjects-grid" id="subjectsGrid">
+                <!-- سيتم ملء المواد هنا -->
+            </div>
+
+            <div class="study-time">
+                <h3>⏰ جدول المراجعة (يُحدّث كل 24 ساعة)</h3>
+                <div id="studySchedule">
+                    <!-- سيتم ملء الجدول هنا -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- قسم الملاحظات -->
+    <div class="container hidden" id="notesPage">
+        <div class="notes-container">
+            <button class="back-btn" onclick="backToDashboard()">← العودة</button>
+            
+            <div class="notes-header">
+                <h2 id="notesSubjectTitle">ملاحظات المادة</h2>
+            </div>
+
+            <textarea id="notesTextarea" placeholder="اكتب ملاحظاتك هنا..."></textarea>
+
+            <div class="notes-actions">
+                <button class="save-btn" onclick="saveNotes()">💾 حفظ</button>
+                <button class="delete-btn" onclick="deleteNotes()">🗑️ حذف</button>
+            </div>
+
+            <div class="success-msg" id="successMsg">تم الحفظ بنجاح! ✓</div>
+        </div>
+    </div>
+
+    <script>
+        // متغيرات عامة
+        let currentStudent = null;
+        let currentSubject = null;
+        const subjects = {
+            arabic: { name: 'عربي', emoji: '📖' },
+            english: { name: 'انجليزي', emoji: '🌐' },
+            history: { name: 'تاريخ', emoji: '📜' },
+            physics: { name: 'فيزياء', emoji: '⚛️' },
+            math: { name: 'رياضيات', emoji: '🔢' },
+            chemistry: { name: 'كيمياء', emoji: '🧪' },
+            programming: { name: 'برمجة', emoji: '💻' },
+            psychology: { name: 'علم نفس', emoji: '🧠' },
+            french: { name: 'فرنساوي', emoji: '🇫🇷' },
+            accounting: { name: 'محاسبة', emoji: '📊' },
+            management: { name: 'إدارة أعمال', emoji: '📋' }
+        };
+
+        // تسجيل الدخول
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('studentName').value;
+            const track = document.getElementById('trackSubject').value;
+            
+            currentStudent = { name, track };
+            localStorage.setItem('student', JSON.stringify(currentStudent));
+            
+            showDashboard();
+        });
+
+        function showDashboard() {
+            document.getElementById('loginPage').classList.add('hidden');
+            document.getElementById('dashboardPage').classList.remove('hidden');
+            document.getElementById('notesPage').classList.add('hidden');
+
+            document.getElementById('welcomeMsg').textContent = `أهلاً ${currentStudent.name}`;
+
+            // عرض المواد الأربعة + مادة المسار
+            const gridHTML = [];
+            const baseSubjects = ['arabic', 'english', 'history'];
+            const trackKey = Object.keys(subjects).find(k => subjects[k].name.includes(document.getElementById('trackSubject').value.split(' ')[0]) || k === currentStudent.track);
+            
+            // المواد الثابتة الثلاث
+            baseSubjects.forEach(subj => {
+                gridHTML.push(`
+                    <div class="subject-card" onclick="openNotes('${subj}')">
+                        <h3>${subjects[subj].emoji}</h3>
+                        <h3>${subjects[subj].name}</h3>
+                        <p>اضغط لفتح الملاحظات</p>
+                    </div>
+                `);
+            });
+
+            // مادة المسار
+            gridHTML.push(`
+                <div class="subject-card" onclick="openNotes('${currentStudent.track}')">
+                    <h3>${subjects[currentStudent.track].emoji}</h3>
+                    <h3>${subjects[currentStudent.track].name}</h3>
+                    <p>مادة المسار</p>
+                </div>
+            `);
+
+            document.getElementById('subjectsGrid').innerHTML = gridHTML.join('');
+
+            // جدول المراجعة
+            updateStudySchedule();
+        }
+
+        function updateStudySchedule() {
+            const scheduleHTML = `
+                <div class="time-item">
+                    <span>المراجعة الأولى:</span>
+                    <strong>الساعة 09:00 صباحاً</strong>
+                </div>
+                <div class="time-item">
+                    <span>المراجعة الثانية:</span>
+                    <strong>الساعة 02:00 ظهراً</strong>
+                </div>
+                <div class="time-item">
+                    <span>المراجعة الثالثة:</span>
+                    <strong>الساعة 06:00 مساءً</strong>
+                </div>
+                <div class="time-item">
+                    <span>المراجعة الليلية:</span>
+                    <strong>الساعة 09:00 مساءً</strong>
+                </div>
+            `;
+            document.getElementById('studySchedule').innerHTML = scheduleHTML;
+        }
+
+        function openNotes(subjectKey) {
+            currentSubject = subjectKey;
+            document.getElementById('dashboardPage').classList.add('hidden');
+            document.getElementById('notesPage').classList.remove('hidden');
+            
+            document.getElementById('notesSubjectTitle').textContent = `ملاحظات ${subjects[subjectKey].name}`;
+            
+            // تحميل الملاحظات المحفوظة
+            const notes = localStorage.getItem(`notes_${subjectKey}`);
+            document.getElementById('notesTextarea').value = notes || '';
+        }
+
+        function backToDashboard() {
+            document.getElementById('notesPage').classList.add('hidden');
+            document.getElementById('dashboardPage').classList.remove('hidden');
+        }
+
+        function saveNotes() {
+            const notes = document.getElementById('notesTextarea').value;
+            localStorage.setItem(`notes_${currentSubject}`, notes);
+            
+            const msg = document.getElementById('successMsg');
+            msg.style.display = 'block';
+            setTimeout(() => {
+                msg.style.display = 'none';
+            }, 2000);
+        }
+
+        function deleteNotes() {
+            if (confirm('هل أنت متأكد من حذف الملاحظات؟')) {
+                localStorage.removeItem(`notes_${currentSubject}`);
+                document.getElementById('notesTextarea').value = '';
+                
+                const msg = document.getElementById('successMsg');
+                msg.textContent = 'تم الحذف بنجاح! ✓';
+                msg.style.display = 'block';
+                setTimeout(() => {
+                    msg.style.display = 'none';
+                }, 2000);
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('student');
+            currentStudent = null;
+            document.getElementById('loginPage').classList.remove('hidden');
+            document.getElementById('dashboardPage').classList.add('hidden');
+            document.getElementById('notesPage').classList.add('hidden');
+            document.getElementById('loginForm').reset();
+        }
+
+        // تحميل البيانات عند فتح الموقع
+        window.addEventListener('load', function() {
+            const saved = localStorage.getItem('student');
+            if (saved) {
+                currentStudent = JSON.parse(saved);
+                showDashboard();
+            }
+        });
+    </script>
+</body>
+</html>
